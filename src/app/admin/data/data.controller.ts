@@ -25,8 +25,8 @@ import { ListingDto } from './dto/listing.dto';
 export class DataController {
   constructor(private readonly dataService: DataService) {}
 
-  @Get('node/:id/:start/:limit')
-  findAll(@Param() params: ListingDto) {
-    return this.dataService.findAllByNode(params);
-  }
+  // @Get('node/:id/:start/:limit')
+  // findAll(@Param() params: ListingDto) {
+  //   return this.dataService.findAllByNode(params);
+  // }
 }

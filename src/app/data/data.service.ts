@@ -44,39 +44,33 @@ export class DataService {
     return Math.round(((iHi - iLo) / (bpHi - bpLo)) * (cP - bpLo) + iLo);
   }
 
-  calculateAQIAverage(AQIs) {
-    let sum = 0;
-    for (const aqi of AQIs) {
-      sum += aqi;
-    }
-    return sum / AQIs.length;
+  calculateAQIHighest(AQIs) {
+    AQIs.sort(function (a, b) {
+      return b - a;
+    });
+
+    return AQIs[0];
   }
 
   findStatus(aqi) {
-    let status;
-    switch (aqi) {
-      case aqi >= 0 && aqi <= 50:
-        status = AQI_STATUS.GOOD;
-        break;
-
-      case aqi >= 51 && aqi <= 100:
-        status = AQI_STATUS.MODERATE;
-        break;
-      case aqi >= 101 && aqi <= 150:
-        status = AQI_STATUS.UNHEALTHY_SENSITIVE;
-        break;
-      case aqi >= 151 && aqi <= 200:
-        status = AQI_STATUS.UNHEALTHY;
-        break;
-      case aqi >= 201 && aqi <= 300:
-        status = AQI_STATUS.VERY_UNHEALTHY;
-        break;
-      case aqi >= 301 && aqi <= 500:
-        status = AQI_STATUS.HAZARDOUS;
-        break;
+    if (aqi >= 0 && aqi <= 50) {
+      return AQI_STATUS.GOOD;
     }
-
-    return status;
+    if (aqi >= 51 && aqi <= 100) {
+      return AQI_STATUS.MODERATE;
+    }
+    if (aqi >= 101 && aqi <= 150) {
+      return AQI_STATUS.UNHEALTHY_SENSITIVE;
+    }
+    if (aqi >= 151 && aqi <= 200) {
+      return AQI_STATUS.UNHEALTHY;
+    }
+    if (aqi >= 201 && aqi <= 300) {
+      return AQI_STATUS.VERY_UNHEALTHY;
+    }
+    if (aqi >= 301 && aqi <= 500) {
+      return AQI_STATUS.HAZARDOUS;
+    }
   }
 
   async findAll(id, query: ListingDto) {
@@ -98,17 +92,67 @@ export class DataService {
     // const pm1Index = []
     // const pm10Index = []
 
-    const dustAQI = this.calculateForReading(data.dust, dustIndex);
-    const no2AQI = this.calculateForReading(data.no2, no2Index);
-    const ch4AQI = this.calculateForReading(data.ch4, ch4Index);
-    const co2AQI = this.calculateForReading(data.co2, co2Index);
-    const coAQI = this.calculateForReading(data.co, coIndex);
-    const nh3AQI = this.calculateForReading(data.nh3, nh3Index);
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+
+    let pipeline = [
+      {
+        $match: {
+          created_at: {
+            $gte: new Date(`${year}-${month + 1}-${day - 1}`),
+            $lt: new Date(`${year}-${month + 1}-${day}`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            day: { $dayOfMonth: '$created_at' },
+            year: { $year: '$created_at' },
+            month: { $month: '$created_at' },
+          },
+          dust: { $avg: '$dust' },
+          no2: { $avg: '$no2' },
+          ch4: { $avg: '$ch4' },
+          co2: { $avg: '$co2' },
+          co: { $avg: '$co' },
+          nh3: { $avg: '$nh3' },
+          pm_one: { $avg: '$pm_one' },
+          pm_ten: { $avg: '$pm_ten' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          dust: 1,
+          no2: 1,
+          ch4: 1,
+          co2: 1,
+          co: 1,
+          nh3: 1,
+          pm_one: 1,
+          pm_ten: 1,
+        },
+      },
+    ];
+
+    const readings = await this.dataRepository.aggregate(pipeline).toArray();
+
+    const readingsOld = readings[0];
+    const dustAQI = this.calculateForReading(readingsOld?.dust, dustIndex);
+    const no2AQI = this.calculateForReading(readingsOld?.no2, no2Index);
+    const ch4AQI = this.calculateForReading(readingsOld?.ch4, ch4Index);
+    const co2AQI = this.calculateForReading(readingsOld?.co2, co2Index);
+    const coAQI = this.calculateForReading(readingsOld?.co, coIndex);
+    const nh3AQI = this.calculateForReading(readingsOld?.nh3, nh3Index);
+
     // const pm1AQI = this.calculateForReading(data.pm_one, nh3Index);
     // const pm10AQI = this.calculateForReading(data.pm_ten, nh3Index);
 
     let AQI = Math.round(
-      this.calculateAQIAverage([
+      this.calculateAQIHighest([
         dustAQI,
         nh3AQI,
         co2AQI,
@@ -204,8 +248,6 @@ export class DataService {
         $sort: { aqi: type === SORTING_TYPE.CLEANEST ? 1 : -1 },
       },
     ];
-
-    console.log(type);
 
     const mapReadings = await this.dataRepository.aggregate(pipeline).toArray();
     return mapReadings;

@@ -13,11 +13,11 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from '../authentication/guard/roles.guard';
 import { VerifiedGuard } from '../authentication/guard/verified.guard';
-import { ListingDto } from './dto/listing.dto';
 import { DataService } from './data.service';
 import { DataDto } from './dto/add-data.dto';
 import { SORTING_TYPE } from 'src/shared/constants';
 import { Public } from '../authentication/decorators/is-public.decorator';
+import { ListingDto } from './dto/listing.dto';
 
 @ApiTags('Data Endpoints')
 @Controller('data')
