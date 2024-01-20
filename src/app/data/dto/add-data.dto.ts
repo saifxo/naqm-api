@@ -20,6 +20,14 @@ export class DataDto {
 
   @ApiProperty()
   @IsNumber()
+  temp: number;
+
+  @ApiProperty()
+  @IsNumber()
+  humid: number;
+
+  @ApiProperty()
+  @IsNumber()
   ch4: number;
 
   @ApiProperty()

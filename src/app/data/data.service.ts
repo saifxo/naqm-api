@@ -180,7 +180,7 @@ export class DataService {
     const mapReadings = await this.dataRepository
       .aggregate([
         {
-          $sort: { node_id: 1, created_at: -1 }, // Sort by node_id and timestamp in descending order
+          $sort: { created_at: -1 }, // Sort by node_id and timestamp in descending order
         },
         {
           $group: {
@@ -272,6 +272,9 @@ export class DataService {
           no2: { $first: '$no2' },
           ch4: { $first: '$ch4' },
           dust: { $first: '$dust' },
+          temp: { $first: '$temp' },
+          humid: { $first: '$humid' },
+          status: { $first: '$status' },
         },
       },
       {
@@ -290,6 +293,9 @@ export class DataService {
           no2: 1,
           ch4: 1,
           dust: 1,
+          temp: 1,
+          humid: 1,
+          status: 1,
         },
       },
     ];

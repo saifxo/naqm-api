@@ -38,6 +38,12 @@ export class Data {
   pm_ten: number;
 
   @Column()
+  temp: number;
+
+  @Column()
+  humid: number;
+
+  @Column()
   aqi: number;
 
   @Column()

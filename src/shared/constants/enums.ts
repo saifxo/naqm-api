@@ -22,7 +22,7 @@ export enum AQI_STATUS {
   GOOD = 'good',
   MODERATE = 'moderate',
   UNHEALTHY_SENSITIVE = 'unhealthy sensitive',
-  UNHEALTHY = 'unhealthys',
+  UNHEALTHY = 'unhealthy',
   VERY_UNHEALTHY = 'very unhealthy',
   HAZARDOUS = 'hazardous',
 }
