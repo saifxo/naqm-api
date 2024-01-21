@@ -357,6 +357,7 @@ export class DataService {
     ];
 
     const readings = await this.dataRepository.aggregate(pipeline).toArray();
+
     return readings;
   }
 
