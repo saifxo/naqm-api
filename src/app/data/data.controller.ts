@@ -49,6 +49,12 @@ export class DataController {
   }
 
   @Public()
+  @Get('latest-readings/node/:nodeId')
+  latestReadingsByNode(@Req() req, @Param('nodeId') nodeId: String) {
+    return this.dataService.latestReadingsByNode(nodeId);
+  }
+
+  @Public()
   @Get('average-aqi')
   averageAqi() {
     return this.dataService.averageAqi();

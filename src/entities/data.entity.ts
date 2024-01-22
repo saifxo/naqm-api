@@ -11,7 +11,7 @@ export class Data {
   name: string;
 
   @Column()
-  node_id: number;
+  node_id: string;
 
   @Column()
   dust: number;

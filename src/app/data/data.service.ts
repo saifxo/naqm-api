@@ -253,6 +253,15 @@ export class DataService {
     return mapReadings;
   }
 
+  async latestReadingsByNode(nodeId: String) {
+    const reading = this.dataRepository.find({
+      where: { node_id: nodeId },
+      order: { created_at: 'DESC' },
+    });
+
+    return reading;
+  }
+
   async latestReadings() {
     let pipeline = [
       {

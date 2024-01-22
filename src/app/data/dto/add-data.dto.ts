@@ -3,8 +3,8 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class DataDto {
   @ApiProperty()
-  @IsNumber()
-  node_id: number;
+  @IsString()
+  node_id: string;
 
   @ApiProperty()
   @IsString()
