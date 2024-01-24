@@ -67,6 +67,12 @@ export class DataController {
   }
 
   @Public()
+  @Get('aqi-graph')
+  avgAqiGraph() {
+    return this.dataService.avgAqiGraph();
+  }
+
+  @Public()
   @Get('top-pollutants')
   topPollutants() {
     return this.dataService.topPollutants();

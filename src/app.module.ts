@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AuthenticationModule } from './app/authentication/authentication.module';
 import { UserRepository } from './repository/user.repository';
 import { DataModule } from './app/data/data.module';
+import { QuoteModule } from './app/quote/quote.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DataModule } from './app/data/data.module';
     }),
     AuthenticationModule,
     DataModule,
+    QuoteModule,
     AdminModule,
     RouterModule.register([
       {

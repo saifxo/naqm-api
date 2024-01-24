@@ -30,12 +30,9 @@ export class UserController {
     return this.userService.create(data);
   }
 
-  @Get('/:start/:limit')
-  async findAllUsers(
-    @Param('start') start: number,
-    @Param('limit') limit: number,
-  ) {
-    return this.userService.findAllUsers(start, limit);
+  @Get('/')
+  async findAllUsers() {
+    return this.userService.findAllUsers();
   }
 
   @Delete(':id')

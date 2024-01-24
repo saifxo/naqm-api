@@ -19,8 +19,6 @@ import { ListingDto } from './dto/listing.dto';
 
 @ApiTags('Admin-Data')
 @ApiBearerAuth('JWT-auth')
-@Roles(ROLE.ADMIN)
-@UseGuards(RolesGuard)
 @Controller('data')
 export class DataController {
   constructor(private readonly dataService: DataService) {}

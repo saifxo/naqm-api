@@ -331,9 +331,53 @@ export class DataService {
     };
   }
 
+  async avgAqiGraph() {
+    const sevenDaysAgo: Date = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    let pipeline = [
+      {
+        $match: {
+          created_at: {
+            $gte: sevenDaysAgo,
+          },
+        },
+      },
+
+      {
+        $group: {
+          _id: {
+            day: { $dayOfMonth: '$created_at' },
+            year: { $year: '$created_at' },
+            month: { $month: '$created_at' },
+          },
+          aqi: { $avg: '$aqi' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: {
+            day: '$_id.day',
+            month: '$_id.month',
+            year: '$_id.year',
+          },
+          aqi: 1,
+        },
+      },
+      {
+        $sort: { 'date.day': 1 },
+      },
+    ];
+
+    const readings = await this.dataRepository.aggregate(pipeline).toArray();
+
+    return readings;
+  }
+
   async calenderValues() {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
+
+    const sevenDaysAgo: Date = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     let pipeline = [
       {
         $match: {

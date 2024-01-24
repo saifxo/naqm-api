@@ -49,20 +49,12 @@ export class UserService {
     }
   }
 
-  async findAllUsers(start: number, limit: number) {
-    const total = await this.userRepository.find({
+  async findAllUsers() {
+    const users = await this.userRepository.find({
       where: {
         role: ROLE.USER,
       },
     });
-    const data = await this.userRepository.find({
-      where: {
-        role: ROLE.USER,
-      },
-      order: { created_at: 'DESC' },
-      skip: start,
-      take: limit,
-    });
-    return { pages: total.length / limit, list: data };
+    return users;
   }
 }
