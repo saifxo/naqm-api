@@ -18,6 +18,12 @@ export enum SORTING_TYPE {
   WORST = 'worst',
 }
 
+export enum GRAPH_TYPE {
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
+}
+
 export enum AQI_STATUS {
   GOOD = 'good',
   MODERATE = 'moderate',
