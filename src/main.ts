@@ -39,6 +39,9 @@ async function bootstrap() {
     'http://localhost',
     'http://127.0.0.1',
     'http://10.7.40.64',
+    'http://68.183.83.33:5000',
+    'http://68.183.83.33:3032',
+    'http://68.183.83.33',
   ];
 
   app.enableCors({

@@ -20,6 +20,10 @@ export class DataDto {
 
   @ApiProperty()
   @IsNumber()
+  SO2: number;
+  
+  @ApiProperty()
+  @IsNumber()
   temp: number;
 
   @ApiProperty()
@@ -57,4 +61,5 @@ export class DataDto {
   @ApiProperty()
   @IsNumber()
   lng: number;
+  
 }

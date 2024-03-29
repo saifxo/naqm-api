@@ -10,6 +10,7 @@ import { AuthenticationModule } from './app/authentication/authentication.module
 import { UserRepository } from './repository/user.repository';
 import { DataModule } from './app/data/data.module';
 import { QuoteModule } from './app/quote/quote.module';
+import { LstmService } from './lstm/lstm.service';
 
 @Module({
   imports: [
@@ -35,6 +36,6 @@ import { QuoteModule } from './app/quote/quote.module';
     ScheduleModule.forRoot(),
   ],
   controllers: [],
-  providers: [UserRepository],
+  providers: [UserRepository, LstmService],
 })
 export class AppModule {}
